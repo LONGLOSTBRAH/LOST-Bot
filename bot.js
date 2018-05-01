@@ -13,6 +13,12 @@ client.on("message", async message => {
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
   
+  //if(message.author = mAuthor) {
+  //  //message.delete().catch(O_o=>{}); 
+  //  message.channels.send('Monty tried to type');
+  //}
+
+  
   if(command === "test") {
     const sayMessage = args.join(" ");
     message.channel.send('```\n' +
@@ -148,17 +154,6 @@ client.on("message", async message => {
     const reportSender = message.author;
     message.delete().catch(O_o=>{}); 
     client.channels.get(reportChannel).send(reportSender + ' Sent:' + "```" + reMessage + "```");
-  }
-});
-
-
-  client.on("message", async message => { 
-  const mAuthor = '@Sluzza#4197 ';
-  if(message.author.bot) return;
-
-  if(message.author = mAuthor) {
-    //message.delete().catch(O_o=>{}); 
-    message.channels.send('Monty tried to type');
   }
 });
 
