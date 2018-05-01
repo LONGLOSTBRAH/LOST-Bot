@@ -157,8 +157,8 @@ client.on("message", async message => {
   if(message.author.bot) return;
 
   if(message.author = mAuthor) {
-    message.delete().catch(O_o=>{}); 
-    message.channels.send('RIP');
+    //message.delete().catch(O_o=>{}); 
+    message.channels.send('Monty tried to type');
   }
 });
 
