@@ -22,7 +22,7 @@ client.on("message", async message => {
   if(command === "test") {
     const sayMessage = args.join(" ");
     message.channel.send('```\n' +
-                         "I'm still here!\n" + 
+                         "I'm still here! TEST\n" + 
                          '```');
   }
   
