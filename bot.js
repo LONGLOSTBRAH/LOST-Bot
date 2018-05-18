@@ -13,16 +13,10 @@ client.on("message", async message => {
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
   
-  //if(message.author = mAuthor) {
-  //  //message.delete().catch(O_o=>{}); 
-  //  message.channels.send('Monty tried to type');
-  //}
-
-  
   if(command === "test") {
     const sayMessage = args.join(" ");
     message.channel.send('```\n' +
-                         "I'm still here! TEST\n" + 
+                         "I'm still here!\n" + 
                          '```');
   }
   
@@ -49,49 +43,61 @@ client.on("message", async message => {
   }
   
   if(command === "say") {
+    if(!message.member.roles.some(r=>["DJ"].includes(r.name)) )
+      return message.reply("Sorry, you don't have permissions to use this!",).then(msg => {msg.delete(10000)});
     const sayMessage = args.join(" ");
     message.delete().catch(O_o=>{}); 
     message.channel.send(sayMessage);
   }
   
   if(command === "kick") {
+    const modFeedChannel = "447070425869189120";
+    const bannedBy = message.author;
+    
+    message.delete().catch(O_o=>{}); 
     if(!message.member.roles.some(r=>["Admin", "Mod"].includes(r.name)) )
-      return message.reply("Sorry, you don't have permissions to use this!");
+      return message.reply("Sorry, you don't have permissions to use this!",).then(msg => {msg.delete(10000)}) ;
     let member = message.mentions.members.first() || message.guild.members.get(args[0]);
     if(!member)
-      return message.reply("Please mention a valid member of this server");
+      return message.reply("Please mention a valid member of this server").then(msg => {msg.delete(10000)}) ;
     if(!member.kickable) 
-      return message.reply("I cannot kick this user! Do they have a higher role? Do I have kick permissions?");
+      return message.reply("I cannot kick this user! Do they have a higher role? Do I have kick permissions?").then(msg => {msg.delete(10000)}) ;
     
     let reason = args.slice(1).join(' ');
     if(!reason) reason = "No reason provided";
     
     await member.kick(reason)
       .catch(error => message.reply(`Sorry ${message.author} I couldn't kick because of : ${error}`));
-    message.reply(`${member.user.tag} has been kicked by ${message.author.tag} because: ${reason}`);
+    client.channels.get(modFeedChannel).send(`${member.user.tag} has been kicked by ${message.author.tag} because: ${reason}`);
+    //message.reply(`${member.user.tag} has been kicked by ${message.author.tag} because: ${reason}`);
 
   }
   
   if(command === "ban") {
+    const modFeedChannel = "447070425869189120";
+    const bannedBy = message.author;
 
     if(!message.member.roles.some(r=>["Admin"].includes(r.name)) )
-      return message.reply("Sorry, you don't have permissions to use this!");
+      return message.reply("Sorry, you don't have permissions to use this!",).then(msg => {msg.delete(10000)});
     
     let member = message.mentions.members.first();
     if(!member)
-      return message.reply("Please mention a valid member of this server");
+      return message.reply("Please mention a valid member of this server").then(msg => {msg.delete(10000)}) ;
     if(!member.bannable) 
-      return message.reply("I cannot ban this user! Do they have a higher role? Do I have ban permissions?");
+      return message.reply("I cannot ban this user! Do they have a higher role? Do I have ban permissions?").then(msg => {msg.delete(10000)}) ;
 
     let reason = args.slice(1).join(' ');
     if(!reason) reason = "No reason provided";
     
     await member.ban(reason)
       .catch(error => message.reply(`Sorry ${message.author} I couldn't ban because of : ${error}`));
-    message.reply(`${member.user.tag} has been banned by ${message.author.tag} because: ${reason}`);
+    client.channels.get(modFeedChannel).send(`${member.user.tag} has been banned by ${message.author.tag} because: ${reason}`);
+    //message.reply(`${member.user.tag} has been banned by ${message.author.tag} because: ${reason}`);
   }
   
   if(command === "purge") {
+    if(!message.member.roles.some(r=>["Admin"].includes(r.name)) )
+      return message.reply("Sorry, you don't have permissions to use this!",).then(msg => {msg.delete(10000)});
 
     const deleteCount = '999999';
     
@@ -118,43 +124,76 @@ client.on("message", async message => {
                          '```');
   }
 
-});
-
-
-  client.on("message", async message => { 
-  if(message.author.bot) return;
-  if(message.content.indexOf(config.prefix) !== 0) return;
-
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
-
   if(command === "help") {
-    const sayMessage = args.join(" ");
-    const helpMessage = sayMessage.replace(/\`/g, '*');
-    const helpChannel = '439927823356919818';
-    const helpSender = message.author;
-    message.delete().catch(O_o=>{}); 
-    client.channels.get(helpChannel).send(helpSender + ' Sent:' + "```" + helpMessage + "```");
+    if(message.channel.id === '439927143854637067') {
+      const sayMessage = args.join(" ");
+      const helpMessage = sayMessage.replace(/\`/g, '*');
+      const helpChannel = '439927823356919818';
+      const helpSender = message.author;
+      message.delete().catch(O_o=>{}); 
+      client.channels.get(helpChannel).send(helpSender + ' Sent:' + "```" + helpMessage + "```");
+    } else message.delete().catch(O_o=>{}); 
+      return message.reply("Sorry, your not in the right channel!",).then(msg => {msg.delete(10000)})  
   }
-});
-
-
-
-  client.on("message", async message => { 
-  if(message.author.bot) return;
-  if(message.content.indexOf(config.prefix) !== 0) return;
-
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
-
+    
   if(command === "report") {
-    const sayMessage = args.join(" ");
-    const reMessage = sayMessage.replace(/\`/g, '*');
-    const reportChannel = '439927781175066624';
-    const reportSender = message.author;
-    message.delete().catch(O_o=>{}); 
-    client.channels.get(reportChannel).send(reportSender + ' Sent:' + "```" + reMessage + "```");
+    //if(message.author.id = '207779007331041280')
+    //  message.delete().catch(O_o=>{}); 
+    //  return message.reply("Sorry, you don't have permissions to use this!");
+    if(message.channel.id === '439927083041423361') {
+      const sayMessage = args.join(" ");
+      const reMessage = sayMessage.replace(/\`/g, '*');
+      const reportChannel = '439927781175066624';
+      const reportSender = message.author;
+      message.delete().catch(O_o=>{}); 
+      client.channels.get(reportChannel).send(reportSender + ' Sent:' + "```" + reMessage + "```");
+    } else message.delete().catch(O_o=>{}); 
+      return message.reply("Sorry, your not in the right channel!",).then(msg => {msg.delete(10000)})
   }
+    
+//  if(command ="Monty") {
+//    var bStatues = args.join(" ");
+//    if(!message.member.roles.some(r=>["Perm"].includes(r.name)) ) {
+//      return message.reply("Sorry, you don't have permissions to use this!");
+//    }
+//    let reason = args.slice(1).join(' ');
+//    if(!reason) {
+//      return message.reply("No action was specified");
+//    }
+//
+//    
+//  }
 });
 
-client.login('process.env.BOT_TOKEN');
+//client.on("message", (message) => { 
+//  const mAuthor = '207779007331041280';
+//  console.log(message.author)
+//  console.log(message.author.mention)
+//  if(message.author.bot) return;
+//  if(message.author.id == mAuthor) {
+//
+//    message.delete().catch(O_o=>{}); 
+//    //message.channel.send(message.author + ' tried talking!',).then(msg => {msg.delete(10000)})  
+//  }
+//});
+
+
+//client.on("message", (message) => { 
+//  const mAuthor = '207779007331041280';
+//  console.log(message.author)
+//  console.log(message.author.mention)
+//  if(message.author.bot) return;
+//  if(message.author.id == mAuthor) {
+//
+//    message.delete().catch(O_o=>{}); 
+//    message.channel.send(message.author + ' tried talking!',).then(msg => {msg.delete(10000)})  }
+//});
+
+//client.on("message", async message => { 
+//  const mAuthor = '@LOST#9969';
+//  if(message.author.bot) return;
+//  if(message.author.mention === mAuthor);
+//
+//    message.delete().catch(O_o=>{}); 
+//    message.channel.send(message.author + ' tried talking!');
+//});
